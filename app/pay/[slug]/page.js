@@ -146,7 +146,7 @@ export default function PaymentPage() {
                 </label>
                 <div className="relative">
                   <span className="absolute left-4 top-1/2 transform -translate-y-1/2 theme-text-primary text-2xl font-bold">
-                    $
+                    ₵
                   </span>
                   <input
                     type="text"
@@ -170,7 +170,7 @@ export default function PaymentPage() {
                   </div>
                 ) : (
                   <>
-                    <span>Pay ${amount || '0.00'}</span>
+                    <span>Pay ₵{amount || '0.00'}</span>
                     <svg className="w-5 h-5 ml-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                     </svg>
@@ -200,7 +200,7 @@ export default function PaymentPage() {
             
             <h1 className="theme-text-primary text-2xl font-bold mb-2">Payment Successful!</h1>
             <p className="theme-text-secondary text-sm mb-4">
-              Your payment of <span className="font-bold">${amount}</span> has been processed
+              Your payment of <span className="font-bold">₵{amount}</span> has been processed
             </p>
             
             <div className="theme-card bg-white/10 rounded-lg p-4 mb-6">
@@ -210,7 +210,7 @@ export default function PaymentPage() {
               </div>
               <div className="flex items-center justify-between text-sm mt-2">
                 <span className="theme-text-secondary">Amount:</span>
-                <span className="theme-text-primary font-bold">${amount}</span>
+                <span className="theme-text-primary font-bold">₵{amount}</span>
               </div>
               <div className="flex items-center justify-between text-sm mt-2">
                 <span className="theme-text-secondary">Status:</span>

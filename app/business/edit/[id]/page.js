@@ -4,8 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { getCurrentUser, getShellById, updateShell } from '@/lib/storage';
 import { THEMES, loadTheme } from '@/lib/themes';
-
-import {PhonePreview} from "../../../../components/pageComponents/PhonePreview";
+import {PhonePreview} from "@/components/pageComponents/PhonePreview";
 
 export default function EditShell() {
   const [user, setUser] = useState(null);
@@ -14,6 +13,8 @@ export default function EditShell() {
   const [logo, setLogo] = useState('');
   const [theme, setTheme] = useState('light-blue');
   const [isLoading, setIsLoading] = useState(false);
+  const [momoNumber, setMomoNumber] = useState('');
+  const [momoError, setMomoError] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
   const params = useParams();
@@ -35,6 +36,7 @@ export default function EditShell() {
     setShell(shellData);
     setBusinessName(shellData.businessName);
     setLogo(shellData.logo || '');
+    setMomoNumber(shellData.momoNumber || '');
     setTheme(shellData.theme);
   }, [router, params.id]);
 
@@ -54,6 +56,11 @@ export default function EditShell() {
   };
 
   const handleSubmit = async (e) => {
+    if (!validateMomoNumber(momoNumber)) {
+      setMomoError('Please enter a valid mobile money number.');
+      setIsLoading(false);
+      return;
+    }
     e.preventDefault();
     setIsLoading(true);
     setError('');
@@ -63,6 +70,7 @@ export default function EditShell() {
         businessName,
         logo,
         theme,
+        momoNumber
       });
 
       router.push('/business/dashboard');
@@ -71,6 +79,11 @@ export default function EditShell() {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const validateMomoNumber = (number) => {
+    const pattern = /^(02|01|00|03|05)[0-9]{8}$/;
+    return pattern.test(number);
   };
 
   if (!user || !shell) {
@@ -122,6 +135,32 @@ export default function EditShell() {
                   required
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                 />
+              </div>
+
+              {/* Mobile Money Number */}
+              <div>
+                <label htmlFor="momoNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  Mobile Money Number
+                </label>
+                <input
+                  id="momoNumber"
+                  type="tel"
+                  value={momoNumber}
+                  onChange={(e) => {
+                  const val = e.target.value.trim();
+                  setMomoNumber(val);
+                  setMomoError(validateMomoNumber(val) ? '' : 'Invalid mobile money number');
+                }}
+                placeholder="e.g. 0244123456"
+                required
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  momoError ? 'border-red-500' : 'border-gray-300'
+                } focus:ring-2 ${momoError ? 'focus:ring-red-500' : 'focus:ring-blue-500'} transition-all duration-200`}
+              />
+
+              {momoError && (
+                <p className="mt-1 text-sm text-red-600">{momoError}</p>
+              )}
               </div>
 
               <div>
@@ -178,7 +217,6 @@ export default function EditShell() {
                   <p className="text-sm text-red-600">{error}</p>
                 </div>
               )}
-
               <button
                 type="submit"
                 disabled={isLoading || !businessName}

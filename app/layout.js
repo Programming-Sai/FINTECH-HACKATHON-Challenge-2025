@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import './../public/themes/theme-base.css';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -17,6 +18,8 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // const saved = localStorage.getItem('theme');
+  // if (saved) loadTheme(saved);
   return (
     <html lang="en">
       <head>

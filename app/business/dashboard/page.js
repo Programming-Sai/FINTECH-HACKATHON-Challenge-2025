@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getCurrentUser, getShellsByBusinessId, setCurrentUser } from '@/lib/storage';
+import { getCurrentUser, getShellsByBusinessId, setCurrentUser, deleteShell } from '@/lib/storage';
 import { THEMES } from '@/lib/themes';
 import Link from 'next/link';
 
@@ -44,6 +44,14 @@ export default function BusinessDashboard() {
       button.style.background = '';
     }, 2000);
   };
+
+  useEffect(() => {
+    localStorage.setItem("shells", JSON.stringify(shells));
+  }, [shells]);
+
+
+
+
 
   if (isLoading) {
     return (
@@ -152,7 +160,7 @@ export default function BusinessDashboard() {
                   </div>
 
                   {/* Actions */}
-                  <div className="flex space-x-2">
+                  <div className="flex space-x-2 flex-wrap">
                     <button
                       onClick={() => router.push(`/business/edit/${shell.id}`)}
                       className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
@@ -173,6 +181,12 @@ export default function BusinessDashboard() {
                     >
                       View
                     </Link>
+                    <button
+                      onClick={() => {if (window.confirm(`Are you sure you want to delete "${shell.businessName}"? This cannot be undone.`)){const updatedShells = shells.filter(s => s.id !== shell.id);setShells(updatedShells); deleteShell(shell.id); }}}
+                      className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200"
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>

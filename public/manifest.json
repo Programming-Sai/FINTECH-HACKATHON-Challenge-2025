@@ -2,10 +2,11 @@
   "name": "Paynari - Payment Processing PWA",
   "short_name": "Paynari",
   "description": "Create branded payment experiences for your business",
-  "start_url": "/",
+  "start_url": "/pay/",
+  "scope": "/pay/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#3B82F6",
+  "theme_color": "#1E40AF",
   "orientation": "portrait-primary",
   "icons": [
     {

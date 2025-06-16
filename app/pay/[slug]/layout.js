@@ -1,9 +1,3 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
-import './../public/themes/theme-base.css';
-
-const inter = Inter({ subsets: ['latin'] });
-
 export const metadata = {
   title: 'Paynari - Payment Processing PWA',
   description: 'Create beautiful branded payment experiences for your business',
@@ -17,34 +11,29 @@ export const metadata = {
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
 };
 
-export default function RootLayout({ children }) {
-  // const saved = localStorage.getItem('theme');
-  // if (saved) loadTheme(saved);
+export default function PayLayout({ children }) {
   return (
     <html lang="en">
-      {/* <head /> */}
       <head>
-        <link rel="manifest" href="/manifest.json" />
+       <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Paynari" />
+        <meta name="theme-color" content="#4F46E5" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
               if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                  for (let registration of registrations) {
-                    registration.unregister();
-                  }
+                window.addEventListener('load', function () {
+                  navigator.serviceWorker.register('/sw.js');
                 });
               }
-            `
+            `,
           }}
         />
       </head>
-
-      <body className={inter.className}>{children}</body>
+      <body>{children}</body>
     </html>
   );
 }

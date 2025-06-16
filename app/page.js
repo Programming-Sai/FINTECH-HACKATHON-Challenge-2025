@@ -29,7 +29,7 @@ export default function Home() {
           </svg>
         </div>
         <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Loading PayShell...
+          Loading Paynari...
         </h1>
       </div>
     </div>

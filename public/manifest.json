@@ -1,6 +1,6 @@
 {
-  "name": "PayShell - Payment Processing PWA",
-  "short_name": "PayShell",
+  "name": "Paynari - Payment Processing PWA",
+  "short_name": "Paynari",
   "description": "Create branded payment experiences for your business",
   "start_url": "/",
   "display": "standalone",

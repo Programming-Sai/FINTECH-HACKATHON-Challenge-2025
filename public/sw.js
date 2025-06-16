@@ -1,4 +1,4 @@
-const CACHE_NAME = 'payshell-v1';
+const CACHE_NAME = 'Paynari-v1';
 const urlsToCache = [
   '/',
   '/auth',

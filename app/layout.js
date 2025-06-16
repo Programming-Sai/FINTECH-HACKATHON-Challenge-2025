@@ -4,14 +4,14 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'PayShell - Payment Processing PWA',
+  title: 'Paynari - Payment Processing PWA',
   description: 'Create beautiful branded payment experiences for your business',
   manifest: '/manifest.json',
   themeColor: '#3B82F6',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'PayShell',
+    title: 'Paynari',
   },
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no',
 };
@@ -24,7 +24,7 @@ export default function RootLayout({ children }) {
         <link rel="apple-touch-icon" href="/icon-192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="PayShell" />
+        <meta name="apple-mobile-web-app-title" content="Paynari" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

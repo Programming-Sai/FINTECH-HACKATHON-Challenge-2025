@@ -196,7 +196,7 @@ export default function EditShell() {
               <div className="bg-black rounded-3xl p-2">
                 <div className="bg-white rounded-2xl overflow-hidden">
                   {/* Preview Content */}
-                  <div className="theme-container min-h-[400px] flex flex-col">
+                  <div className="theme-container min-h-[550px] flex flex-col">
                     {/* Header */}
                     <div className="theme-card border-0 rounded-none p-4 text-center">
                       {logo ? (

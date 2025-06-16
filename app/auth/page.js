@@ -65,7 +65,7 @@ export default function AuthPage() {
             </svg>
           </div>
           <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-            PayShell
+            Paynari
           </h1>
           <p className="text-gray-600">
             {isLogin ? 'Sign in to your account' : 'Create your account'}

@@ -175,7 +175,7 @@ export default function PaymentPage() {
 
               <div className="text-center">
                 <p className="theme-text-secondary text-xs">
-                  Secure payment powered by PayShell
+                  Secure payment powered by Paynari
                 </p>
               </div>
             </div>

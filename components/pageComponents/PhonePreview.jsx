@@ -9,7 +9,6 @@ export function PhonePreview({ logo, businessName, theme }) {
       loadTheme(theme); // Already works for full preview
     }
   }, [theme]);
-  const amount = 90;
   
   return (
     <div className="mx-auto max-w-xs">

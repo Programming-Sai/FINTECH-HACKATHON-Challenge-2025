@@ -15,7 +15,8 @@ export default function AuthPage() {
   const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState([]);
-
+  const [momoNumber, setMomoNumber] = useState('');
+  const [momoError, setMomoError] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -49,6 +50,11 @@ const handleBusinessSelect = (slug, name) => {
   setSearchTerm(name);
   setIsSearchOpen(false);
 };
+
+  const validateMomoNumber = (number) => {
+    const pattern = /^(02|01|00|03|05)[0-9]{8}$/;
+    return pattern.test(number);
+  };
 
 
 
@@ -196,6 +202,33 @@ const handleBusinessSelect = (slug, name) => {
               )}
             </div>
           )}
+
+
+          {/* Mobile Money Number */}
+              <div>
+                <label htmlFor="momoNumber" className="block text-sm font-medium text-gray-700 mb-2">
+                  Mobile Money Number
+                </label>
+                <input
+                  id="momoNumber"
+                  type="tel"
+                  value={momoNumber}
+                  onChange={(e) => {
+                  const val = e.target.value.trim();
+                  setMomoNumber(val);
+                  setMomoError(validateMomoNumber(val) ? '' : 'Invalid mobile money number');
+                }}
+                placeholder="e.g. 0244123456"
+                required
+                className={`w-full px-4 py-3 rounded-lg border ${
+                  momoError ? 'border-red-500' : 'border-gray-300'
+                } focus:ring-2 ${momoError ? 'focus:ring-red-500' : 'focus:ring-blue-500'} transition-all duration-200`}
+              />
+
+              {momoError && (
+                <p className="mt-1 text-sm text-red-600">{momoError}</p>
+              )}
+              </div>
 
 
 

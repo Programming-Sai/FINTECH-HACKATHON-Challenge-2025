@@ -13,8 +13,6 @@ export default function CreateShell() {
   const [logo, setLogo] = useState('');
   const [theme, setTheme] = useState('light-blue');
   const [isLoading, setIsLoading] = useState(false);
-  const [momoNumber, setMomoNumber] = useState('');
-  const [momoError, setMomoError] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
@@ -54,7 +52,6 @@ export default function CreateShell() {
         logo,
         theme,
         slug,
-        momoNumber,
       });
 
       router.push('/business/dashboard');
@@ -63,10 +60,6 @@ export default function CreateShell() {
     } finally {
       setIsLoading(false);
     }
-  };
-    const validateMomoNumber = (number) => {
-    const pattern = /^(02|01|00|03|05)[0-9]{8}$/;
-    return pattern.test(number);
   };
 
   if (!user) {
@@ -120,31 +113,6 @@ export default function CreateShell() {
                 />
               </div>
 
-              {/* Mobile Money Number */}
-              <div>
-                <label htmlFor="momoNumber" className="block text-sm font-medium text-gray-700 mb-2">
-                  Mobile Money Number
-                </label>
-                <input
-                  id="momoNumber"
-                  type="tel"
-                  value={momoNumber}
-                  onChange={(e) => {
-                  const val = e.target.value.trim();
-                  setMomoNumber(val);
-                  setMomoError(validateMomoNumber(val) ? '' : 'Invalid mobile money number');
-                }}
-                placeholder="e.g. 0244123456"
-                required
-                className={`w-full px-4 py-3 rounded-lg border ${
-                  momoError ? 'border-red-500' : 'border-gray-300'
-                } focus:ring-2 ${momoError ? 'focus:ring-red-500' : 'focus:ring-blue-500'} transition-all duration-200`}
-              />
-
-              {momoError && (
-                <p className="mt-1 text-sm text-red-600">{momoError}</p>
-              )}
-              </div>
 
 
               <div>

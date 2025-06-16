@@ -79,7 +79,7 @@ export default function BusinessDashboard() {
               <h1 className="text-xl font-bold text-gray-900">Paynari</h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Welcome, {user?.email}</span>
+              <span className="hidden sm:inline text-sm text-gray-600">Welcome, {(user?.email ?? '').split('@')[0] || 'Guest'}</span>
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition-colors duration-200"

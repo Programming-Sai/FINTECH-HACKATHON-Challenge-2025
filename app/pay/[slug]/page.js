@@ -5,6 +5,11 @@ import { useParams } from 'next/navigation';
 import { getShellBySlug } from '@/lib/storage';
 import { loadTheme } from '@/lib/themes';
 
+import {PhonePreview} from "../../../components/pageComponents/PhonePreview";
+
+
+
+
 export default function PaymentPage() {
   const [shell, setShell] = useState(null);
   const [step, setStep] = useState('splash'); // splash, payment, success
@@ -181,6 +186,8 @@ export default function PaymentPage() {
             </div>
           </div>
         )}
+
+        {/* <PhonePreview logo={shell.logo} businessName={shell.businessName}/> */}
 
         {/* Success Screen */}
         {step === 'success' && (

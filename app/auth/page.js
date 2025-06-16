@@ -2,15 +2,20 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { createUser, authenticateUser, setCurrentUser, getCurrentUser } from '@/lib/storage';
+import { createUser, authenticateUser, setCurrentUser, getCurrentUser, getAllShells } from '@/lib/storage';
 
 export default function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('business');
+  const [role, setRole] = useState('');
+  const [slug, setSlug] = useState('');
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [error, setError] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [results, setResults] = useState([]);
+
   const router = useRouter();
 
   useEffect(() => {
@@ -21,6 +26,31 @@ export default function AuthPage() {
       }
     }
   }, [router]);
+
+  useEffect(() => {
+  if (role === 'customer') {
+    const shells = getAllShells();
+    const filtered = shells.filter(shell =>
+      shell.businessName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      shell.slug.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setResults(filtered);
+  }
+  if (searchTerm){
+    setIsSearchOpen(true);
+  }else{
+    setIsSearchOpen(false);
+  }
+}, [searchTerm, role]);
+
+
+const handleBusinessSelect = (slug, name) => {
+  setSlug(slug);
+  setSearchTerm(name);
+  setIsSearchOpen(false);
+};
+
+
 
   const handleAuth = async (e) => {
     e.preventDefault();
@@ -42,10 +72,16 @@ export default function AuthPage() {
       setCurrentUser(user);
       
       // Route based on role
-      if (user.role === 'business') {
+      if (role !== user?.role) {setError("Please Use your correct account to enter.");}
+
+      else if (user.role === 'business') {
         router.push('/business/dashboard');
       } else {
-        router.push('/');
+        if (slug){
+          router.push(`/pay/${slug}`);
+        }else{
+           setError("Please select a Role. and then a Buiness (If you are a Customer)");
+        }
       }
     } catch (err) {
       setError(err.message);
@@ -128,7 +164,41 @@ export default function AuthPage() {
             />
           </div>
 
-          {!isLogin && (
+          {role === 'customer' && (
+            <div className="relative w-full max-w-md">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search your business (name or slug)"
+                className="w-full p-2 border border-gray-300 rounded-md"
+              />
+              
+              {searchTerm && isSearchOpen && results.length > 0 && (
+                <ul className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-48 overflow-y-auto">
+                  {results.map((b) => (
+                    <li
+                      key={b.slug}
+                      onClick={() => handleBusinessSelect(b.slug, b.businessName)}
+                      className="p-2 hover:bg-gray-100 cursor-pointer"
+                    >
+                      <div className="font-medium">{b.businessName}</div>
+                      <div className="text-xs text-gray-500">{b.slug}</div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              
+              {searchTerm && isSearchOpen && results.length === 0 && (
+                <div className="absolute z-10 w-full bg-white border border-gray-300 rounded-md shadow-md p-2 text-gray-500">
+                  No businesses found.
+                </div>
+              )}
+            </div>
+          )}
+
+
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Account Type
@@ -168,7 +238,6 @@ export default function AuthPage() {
                 </button>
               </div>
             </div>
-          )}
 
           {error && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200">

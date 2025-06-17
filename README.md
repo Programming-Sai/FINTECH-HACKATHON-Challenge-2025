@@ -104,7 +104,7 @@ public/
 
 ## 🧠 What’s Next
 
-- [ ] Add user authentication
+- [ ] Beef up user authentication
 - [ ] Role-based business access
 - [ ] Full payment processor integration (e.g. Paystack, Flutterwave, MTN MoMo)
 - [ ] Analytics per shell

@@ -13,6 +13,7 @@ export default function BusinessDashboard() {
   const router = useRouter();
 
   useEffect(() => {
+    const fetchShells = async () => {
     const currentUser = getCurrentUser();
     if (!currentUser || currentUser.role !== 'business') {
       router.push('/auth');
@@ -20,9 +21,16 @@ export default function BusinessDashboard() {
     }
 
     setUser(currentUser);
-    const userShells = getShellsByBusinessId(currentUser.id);
-    setShells(userShells);
+
+    // Get shells from DB
+    const shellsCursor = await getShellsByBusinessId(currentUser.id); // this should return the cursor
+    // const userShells = await shellsCursor.toArray(); // now this is a proper array
+
+    setShells(shellsCursor);
     setIsLoading(false);
+  };
+
+  fetchShells();
   }, [router]);
 
   const handleLogout = () => {
@@ -49,6 +57,25 @@ export default function BusinessDashboard() {
     localStorage.setItem("shells", JSON.stringify(shells));
   }, [shells]);
 
+
+  const handleDelete = async (shell) => {
+    const confirmMsg = `Are you sure you want to delete "${shell.businessName}"? This cannot be undone.`;
+    if (!window.confirm(confirmMsg)) return;
+
+    // optimistically update UI
+    setShells((prev) => prev.filter(s => s._id !== shell._id));
+
+    try {
+      await deleteShell(shell._id);
+      // if you want, you could refetch here to be extra sure:
+      // const fresh = await getShellsByBusinessId(user.id);
+      // setShells(fresh);
+    } catch (err) {
+      // on error, rollback the UI change
+      alert('Delete failed: ' + err.message);
+      // optional: re‑load the list from server
+    }
+  };
 
 
 
@@ -126,8 +153,8 @@ export default function BusinessDashboard() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {shells.map((shell) => (
-              <div key={shell.id} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-200 transform hover:scale-105">
+            {shells?.map((shell) => (
+              <div key={shell._id} className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-all duration-200 transform hover:scale-105">
                 {/* Theme Preview */}
                 <div 
                   className="h-32 p-4 flex items-center justify-center"
@@ -162,7 +189,7 @@ export default function BusinessDashboard() {
                   {/* Actions */}
                   <div className="flex space-x-2 flex-wrap">
                     <button
-                      onClick={() => router.push(`/business/edit/${shell.id}`)}
+                      onClick={() => router.push(`/business/edit/${shell._id}`)}
                       className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200"
                     >
                       Edit
@@ -173,6 +200,7 @@ export default function BusinessDashboard() {
                     >
                       Share
                     </button>
+                    {console.log('Linking to slug:', shell.slug, typeof shell.slug)}
                     <Link
                       href={`/pay/${shell.slug}`}
                       target="_blank"
@@ -182,7 +210,7 @@ export default function BusinessDashboard() {
                       View
                     </Link>
                     <button
-                      onClick={() => {if (window.confirm(`Are you sure you want to delete "${shell.businessName}"? This cannot be undone.`)){const updatedShells = shells.filter(s => s.id !== shell.id);setShells(updatedShells); deleteShell(shell.id); }}}
+                      onClick={() => handleDelete(shell)}
                       className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors duration-200"
                     >
                       Delete

@@ -58,7 +58,7 @@ export default function EditShell() {
     setError('');
 
     try {
-      updateShell(shell.id, {
+      updateShell(shell._id, {
         businessName,
         logo,
         theme,

@@ -20,17 +20,19 @@ export default function AuthPage() {
   const router = useRouter();
 
   useEffect(() => {
-    const user = getCurrentUser();
+    async function fetchUser (){
+      const user = await getCurrentUser();
     if (user) {
       if (user.role === 'business') {
         router.push('/business/dashboard');
       }
-    }
+    }}
+    fetchUser();
   }, [router]);
 
   useEffect(() => {
-  if (role === 'customer') {
-    const shells = getAllShells();
+  async function fetchShells (){if (role === 'customer') {
+    const shells = await getAllShells();
     const filtered = shells.filter(shell =>
       shell.businessName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       shell.slug.toLowerCase().includes(searchTerm.toLowerCase())
@@ -41,7 +43,8 @@ export default function AuthPage() {
     setIsSearchOpen(true);
   }else{
     setIsSearchOpen(false);
-  }
+  }}
+  fetchShells();
 }, [searchTerm, role]);
 
 
@@ -67,15 +70,15 @@ const handleBusinessSelect = (slug, name) => {
       let user;
       
       if (isLogin) {
-        user = authenticateUser(email, password);
+        user = await authenticateUser(email, password);
         if (!user) {
           throw new Error('Invalid credentials');
         }
       } else {
-        user = createUser(email, password, role);
+        user = await createUser(email, role, momoNumber);
       }
 
-      setCurrentUser(user);
+      await setCurrentUser(user);
       
       // Route based on role
       if (role !== user?.role) {setError("Please Use your correct account to enter.");}

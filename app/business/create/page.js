@@ -45,7 +45,7 @@ export default function CreateShell() {
     setError('');
 
     try {
-      const slug = generateSlug(businessName);
+      const slug = await generateSlug(businessName);
       const shell = createShell({
         businessId: user.id,
         businessName,

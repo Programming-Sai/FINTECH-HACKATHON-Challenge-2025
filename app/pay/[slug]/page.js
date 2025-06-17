@@ -5,7 +5,6 @@ import { useParams } from 'next/navigation';
 import { getShellBySlug } from '@/lib/storage';
 import { loadTheme } from '@/lib/themes';
 
-import {PhonePreview} from "../../../components/pageComponents/PhonePreview";
 
 
 
@@ -19,16 +18,19 @@ export default function PaymentPage() {
   const params = useParams();
 
   useEffect(() => {
-    const shellData = getShellBySlug(params.slug);
-    if (!shellData) {
+    async function fetchShell () {
+      const shellData = await getShellBySlug(params.slug);
+      if (!shellData) {
+        setIsLoading(false);
+        return;
+      }
+
+      setShell(shellData);
+      loadTheme(shellData.theme);
       setIsLoading(false);
-      return;
     }
 
-    setShell(shellData);
-    loadTheme(shellData.theme);
-    setIsLoading(false);
-
+    fetchShell();
     // Auto-navigate from splash after 2 seconds
     const timer = setTimeout(() => {
       setStep('payment');
